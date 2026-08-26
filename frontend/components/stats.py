@@ -22,7 +22,7 @@ def render_dashboard_stats(stats: Dict[str, Any]):
 
     st.markdown("""
     <div style="margin-bottom: 0.5rem; margin-top: 1rem;">
-        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b5a2b; font-weight: 700;">
+        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #4f46e5; font-weight: 700;">
             Vault Overview
         </span>
     </div>

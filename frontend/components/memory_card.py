@@ -10,16 +10,16 @@ from ..utils.types import MemoryItemView
 
 def get_category_color(category: str) -> str:
     palette = {
-        "Family": "#b85d38",
-        "Travel": "#2e6f9e",
-        "College": "#5b4282",
-        "Achievements": "#b8860b",
-        "Events": "#c25975",
-        "Friends": "#3f7a63",
-        "Everyday": "#706e6b",
-        "Work": "#4a5568"
+        "Family": "#e11d48",       # Rose / Coral
+        "Travel": "#0284c7",       # Ocean Blue
+        "College": "#7c3aed",      # Purple / Violet
+        "Achievements": "#d97706", # Rich Gold / Amber
+        "Events": "#9333ea",       # Royal Purple
+        "Friends": "#059669",      # Emerald Green
+        "Everyday": "#475569",     # Modern Slate
+        "Work": "#2563eb"          # Vibrant Blue
     }
-    return palette.get(category, "#8b5a2b")
+    return palette.get(category, "#4f46e5")
 
 
 def render_memory_of_the_day(memory: Optional[MemoryItemView], on_relive_click: Optional[Callable[[str], None]] = None):

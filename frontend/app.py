@@ -280,7 +280,7 @@ if not is_logged_in:
             st.markdown("""
             <div class="vault-card" style="text-align: center;">
                 <div style="font-size: 2.2rem; margin-bottom: 0.3rem;">🔐</div>
-                <h2 style="font-family: 'Playfair Display', serif; color: #3b2a20; margin-bottom: 0.2rem;">
+                <h2 style="font-family: 'Playfair Display', serif; color: #0f172a; margin-bottom: 0.2rem;">
                     2FA Verification
                 </h2>
                 <p style="color: #7a6352; font-size: 0.95rem; margin-bottom: 1.2rem;">
@@ -317,10 +317,10 @@ if not is_logged_in:
             st.markdown("""
             <div style="text-align: center; margin-top: 2rem; margin-bottom: 1.5rem;">
                 <div style="font-size: 2.5rem; margin-bottom: 0.3rem;">📖</div>
-                <h1 style="font-family: 'Playfair Display', serif; font-size: 2.3rem; color: #3b2a20; margin-bottom: 0.2rem;">
+                <h1 style="font-family: 'Playfair Display', serif; font-size: 2.3rem; color: #0f172a; margin-bottom: 0.2rem;">
                     Memory Box
                 </h1>
-                <p style="color: #705342; font-size: 1.05rem;">
+                <p style="color: #475569; font-size: 1.05rem;">
                     Your memories. Understood by AI.
                 </p>
             </div>
@@ -329,7 +329,7 @@ if not is_logged_in:
             # Instant Judge Demo Access
             st.markdown("""
             <div style="background: linear-gradient(135deg, #fffdf8 0%, #fef8eb 100%); border: 1px solid #d4af37; border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 1.5rem;">
-                <span style="font-weight: 700; color: #8b5a2b; font-size: 0.95rem;">⚡ Instant Judge Mode</span>
+                <span style="font-weight: 700; color: #4f46e5; font-size: 0.95rem;">⚡ Instant Judge Mode</span>
                 <p style="font-size: 0.85rem; color: #6b4e3a; margin: 4px 0 10px 0;">
                     Skip credentials and enter the vault preloaded with realistic memories.
                 </p>
@@ -387,7 +387,7 @@ else:
     with c_top1:
         st.markdown(f"""
         <div style="padding: 6px 0; font-family: 'Plus Jakarta Sans', sans-serif;">
-            <span style="font-size: 1.05rem; font-weight: 700; color: #3b2a20;">
+            <span style="font-size: 1.05rem; font-weight: 700; color: #0f172a;">
                 👋 Welcome, {user_name}
             </span>
             <span style="font-size: 0.88rem; color: #7a6352; margin-left: 8px;">
@@ -484,7 +484,7 @@ else:
         if all_mems:
             st.markdown("""
             <div style="margin-top: 2rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="font-family: 'Playfair Display', Georgia, serif; color: #3b2a20; margin: 0;">
+                <h3 style="font-family: 'Playfair Display', Georgia, serif; color: #0f172a; margin: 0;">
                     Recent Memories
                 </h3>
             </div>
@@ -502,7 +502,7 @@ else:
         # 6. Specialized Experience Modules (Preserving all working features!)
         st.markdown("""
         <div style="margin-top: 2.5rem; margin-bottom: 0.8rem;">
-            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b5a2b; font-weight: 700;">
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #4f46e5; font-weight: 700;">
                 Specialized Preservation Studios
             </span>
         </div>
@@ -528,10 +528,10 @@ else:
     elif st.session_state.active_nav == "create":
         st.markdown("""
         <div style="margin-bottom: 1.2rem;">
-            <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #3b2a20; margin-bottom: 0.2rem;">
+            <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #0f172a; margin-bottom: 0.2rem;">
                 ➕ Create a New Memory
             </h2>
-            <p style="color: #705342; font-size: 1rem;">
+            <p style="color: #475569; font-size: 1rem;">
                 Share a story, photo, or thought. <b>AI will automatically extract the title, summary, tags, people, and meaning.</b>
             </p>
         </div>
@@ -596,16 +596,16 @@ else:
             cat_color = get_category_color(draft.category)
 
             st.markdown(f"""
-            <div class="vault-card" style="border: 2px solid #8b5a2b; margin-top: 1.5rem;">
+            <div class="vault-card" style="border: 2px solid #4f46e5; margin-top: 1.5rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                    <span style="font-weight: 700; color: #8b5a2b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em;">
+                    <span style="font-weight: 700; color: #4f46e5; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em;">
                         ✨ AI Inferred Understanding
                     </span>
                     <span class="category-badge" style="background: {cat_color}20; color: {cat_color};">
                         {draft.category}
                     </span>
                 </div>
-                <h3 style="font-family: 'Playfair Display', serif; color: #3b2a20; margin-bottom: 0.4rem;">
+                <h3 style="font-family: 'Playfair Display', serif; color: #0f172a; margin-bottom: 0.4rem;">
                     {draft.title}
                 </h3>
                 <p style="color: #5c4232; font-size: 1.02rem; line-height: 1.6;">
@@ -659,10 +659,10 @@ else:
     elif st.session_state.active_nav == "ask":
         st.markdown("""
         <div style="margin-bottom: 1.2rem;">
-            <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #3b2a20; margin-bottom: 0.2rem;">
+            <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #0f172a; margin-bottom: 0.2rem;">
                 🔍 Ask Your Memories
             </h2>
-            <p style="color: #705342; font-size: 1rem;">
+            <p style="color: #475569; font-size: 1rem;">
                 Search your personal memory vault naturally. AI retrieves matching moments and explains why they relate.
             </p>
         </div>
@@ -670,7 +670,7 @@ else:
 
         # Suggested Query Chips
         st.markdown("""
-        <div style="margin-bottom: 0.6rem; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; color: #8b5a2b; font-weight: 600;">
+        <div style="margin-bottom: 0.6rem; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; color: #4f46e5; font-weight: 600;">
             Try asking:
         </div>
         """, unsafe_allow_html=True)
@@ -709,16 +709,16 @@ else:
             if matches:
                 st.markdown(f"""
                 <div style="background: linear-gradient(135deg, #fffdf8 0%, #faf3e5 100%); border: 1.5px solid #d4af37; border-radius: 14px; padding: 18px 22px; margin: 1.2rem 0; box-shadow: 0 4px 18px rgba(139,90,43,0.08);">
-                    <div style="display: flex; align-items: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.9rem; color: #8b5a2b; margin-bottom: 6px;">
+                    <div style="display: flex; align-items: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.9rem; color: #4f46e5; margin-bottom: 6px;">
                         <span>🧠</span> AI Search Intelligence &nbsp;·&nbsp; <span style="color: #2e7d32; font-weight: 600;">✓ {len(matches)} matching moments identified</span>
                     </div>
-                    <div style="color: #3b2a20; font-size: 1rem; line-height: 1.6;">
+                    <div style="color: #0f172a; font-size: 1rem; line-height: 1.6;">
                         {explanation}
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
-                st.markdown(f"<h4 style='font-family: \"Playfair Display\", serif; color: #3b2a20; margin-top: 1rem;'>Matching Memories ({len(matches)})</h4>", unsafe_allow_html=True)
+                st.markdown(f"<h4 style='font-family: \"Playfair Display\", serif; color: #0f172a; margin-top: 1rem;'>Matching Memories ({len(matches)})</h4>", unsafe_allow_html=True)
                 m_cols = st.columns(3)
                 for idx, mem in enumerate(matches):
                     with m_cols[idx % 3]:
@@ -732,10 +732,10 @@ else:
                     <h3 style="font-family: 'Playfair Display', serif; color: #5a2e16; margin-bottom: 0.4rem;">
                         No Memories Found for this Specific Timeframe
                     </h3>
-                    <p style="color: #705342; font-size: 1rem; max-width: 600px; margin: 0 auto 1rem auto; line-height: 1.5;">
+                    <p style="color: #475569; font-size: 1rem; max-width: 600px; margin: 0 auto 1rem auto; line-height: 1.5;">
                         {explanation}
                     </p>
-                    <div style="font-size: 0.88rem; color: #8b5a2b; font-weight: 600;">
+                    <div style="font-size: 0.88rem; color: #4f46e5; font-weight: 600;">
                         💡 Try clicking one of the available years recorded in your vault:
                     </div>
                 </div>
@@ -763,10 +763,10 @@ else:
     elif st.session_state.active_nav == "memories":
         st.markdown("""
         <div style="margin-bottom: 1rem;">
-            <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #3b2a20; margin-bottom: 0.2rem;">
+            <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #0f172a; margin-bottom: 0.2rem;">
                 🗂️ My Memories
             </h2>
-            <p style="color: #705342; font-size: 1rem;">
+            <p style="color: #475569; font-size: 1rem;">
                 Browse and filter memories organized automatically by AI into smart themes.
             </p>
         </div>
@@ -811,10 +811,10 @@ else:
     elif st.session_state.active_nav == "timeline":
         st.markdown("""
         <div style="margin-bottom: 1rem;">
-            <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #3b2a20; margin-bottom: 0.2rem;">
+            <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #0f172a; margin-bottom: 0.2rem;">
                 📅 Chronological Timeline
             </h2>
-            <p style="color: #705342; font-size: 1rem;">
+            <p style="color: #475569; font-size: 1rem;">
                 Travel back through your life story, decade by decade, year by year.
             </p>
         </div>
@@ -837,10 +837,10 @@ else:
             <div style="display: flex; align-items: center; margin-bottom: 1rem;">
                 <div style="font-size: 2.2rem; margin-right: 12px;">🔐</div>
                 <div>
-                    <h2 style="font-family: 'Playfair Display', serif; color: #3b2a20; margin: 0;">
+                    <h2 style="font-family: 'Playfair Display', serif; color: #0f172a; margin: 0;">
                         Private by Design
                     </h2>
-                    <span style="color: #8b5a2b; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.88rem; font-weight: 600;">
+                    <span style="color: #4f46e5; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.88rem; font-weight: 600;">
                         Enterprise-Grade Confidentiality & Personal Sovereignty
                     </span>
                 </div>
@@ -853,25 +853,25 @@ else:
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 1.5rem 0;">
                 <div style="background: #fdfbf7; border: 1px solid #e7ded0; border-radius: 10px; padding: 14px;">
-                    <div style="font-weight: 700; color: #3b2a20; margin-bottom: 4px;">🔒 Private by Default</div>
+                    <div style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">🔒 Private by Default</div>
                     <div style="font-size: 0.88rem; color: #6b5344; line-height: 1.4;">
                         Your memories are never public, never indexed by web crawlers, and never sold. Only authenticated family accounts can view them.
                     </div>
                 </div>
                 <div style="background: #fdfbf7; border: 1px solid #e7ded0; border-radius: 10px; padding: 14px;">
-                    <div style="font-weight: 700; color: #3b2a20; margin-bottom: 4px;">👤 Complete User Ownership</div>
+                    <div style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">👤 Complete User Ownership</div>
                     <div style="font-size: 0.88rem; color: #6b5344; line-height: 1.4;">
                         You have complete sovereignty over your data. You can edit or permanently delete any memory card at any moment.
                     </div>
                 </div>
                 <div style="background: #fdfbf7; border: 1px solid #e7ded0; border-radius: 10px; padding: 14px;">
-                    <div style="font-weight: 700; color: #3b2a20; margin-bottom: 4px;">🛡️ Multi-Factor 2FA Guard</div>
+                    <div style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">🛡️ Multi-Factor 2FA Guard</div>
                     <div style="font-size: 0.88rem; color: #6b5344; line-height: 1.4;">
                         Dual-channel time-based one-time passwords (TOTP/SMS/Email) prevent unauthorized access even if credentials are leaked.
                     </div>
                 </div>
                 <div style="background: #fdfbf7; border: 1px solid #e7ded0; border-radius: 10px; padding: 14px;">
-                    <div style="font-weight: 700; color: #3b2a20; margin-bottom: 4px;">🧼 Sanitized & Rate Limited</div>
+                    <div style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">🧼 Sanitized & Rate Limited</div>
                     <div style="font-size: 0.88rem; color: #6b5344; line-height: 1.4;">
                         Bleach HTML sanitization prevents Cross-Site Scripting (XSS), while SlowAPI blocks brute-force login attacks.
                     </div>

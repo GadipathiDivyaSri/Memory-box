@@ -12,11 +12,11 @@ def render_hero_section(on_create_click=None, on_explore_click=None):
     """Renders the main hero section with headline, value proposition, and CTAs."""
     st.markdown("""
     <div style="text-align: center; padding: 2rem 1rem 1.5rem 1rem;">
-        <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: #fdf8ee; border: 2px solid #d4af37; border-radius: 20px; font-size: 2rem; margin-bottom: 1rem; box-shadow: 0 4px 14px rgba(212,175,55,0.15);">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 68px; height: 68px; background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%); border: 1.5px solid #c7d2fe; border-radius: 22px; font-size: 2.2rem; margin-bottom: 1rem; box-shadow: 0 4px 20px rgba(79, 70, 229, 0.15);">
             📖
         </div>
         <h1 class="hero-title">Memory Box</h1>
-        <h3 style="font-family: 'Plus Jakarta Sans', sans-serif !important; color: #8b5a2b; font-weight: 700; font-size: 1.5rem; margin-top: -0.5rem; margin-bottom: 0.8rem;">
+        <h3 style="font-family: 'Plus Jakarta Sans', sans-serif !important; color: #4f46e5; font-weight: 700; font-size: 1.5rem; margin-top: -0.5rem; margin-bottom: 0.8rem; letter-spacing: -0.01em;">
             Your memories. Understood by AI.
         </h3>
         <p class="hero-sub" style="margin: 0 auto 1.5rem auto;">

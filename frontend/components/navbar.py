@@ -20,10 +20,10 @@ def render_navbar(active_tab: str, on_tab_change: Callable[[str], None]):
 
     st.markdown("""
     <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
-        <div style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 1.4rem; color: #8b5a2b;">
-            📖 Memory Box
+        <div style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 1.4rem; color: #0f172a;">
+            <span style="color: #4f46e5;">📖</span> Memory Box
         </div>
-        <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; color: #705342;">
+        <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.82rem; font-weight: 600; color: #64748b; background: #e0e7ff; color: #4338ca; padding: 3px 10px; border-radius: 12px;">
             AI Memory Vault
         </div>
     </div>
@@ -37,4 +37,4 @@ def render_navbar(active_tab: str, on_tab_change: Callable[[str], None]):
             if st.button(label, key=f"nav_tab_{tab_id}", type=btn_type, use_container_width=True):
                 on_tab_change(tab_id)
 
-    st.markdown("<hr style='margin: 0.8rem 0 1.2rem 0; border: none; border-top: 1px solid #e2d7c5;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin: 0.8rem 0 1.2rem 0; border: none; border-top: 1px solid #e2e8f0;'>", unsafe_allow_html=True)
