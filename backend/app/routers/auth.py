@@ -236,10 +236,6 @@ async def verify_otp(req: VerifyOTPRequest):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User account not found.")
 
     is_valid, msg = await otp_service.verify_otp(uid=target_uid, entered_otp=target_otp)
-    if not is_valid and str(target_otp).strip() == "123456" and (target_uid == "elder_heritage_keeper_1" or "elder" in str(user.get("email", ""))):
-        is_valid = True
-        msg = "Master demo OTP verified."
-
     if not is_valid:
         print(f"[DEBUG] OTP verification failed: {msg}")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)

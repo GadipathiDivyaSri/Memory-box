@@ -612,24 +612,7 @@ def do_verify(uid, otp):
     safe_log(f"[DEBUG] Email OTP: {email_otp} | SMS OTP: {sms_otp}")
     safe_log("="*55 + "\n")
 
-    # Priority 2: Hackathon Flawless Fallback (123456 always succeeds)
-    if clean_otp == "123456":
-        st.session_state.authenticated = True
-        st.session_state.auth_token = "demo_jwt_heritage_123456"
-        st.session_state.user_id = uid or "elder_heritage_keeper_1"
-        if not st.session_state.user_data:
-            st.session_state.user_data = {
-                "name": "Saraswathi Devi",
-                "age": 78,
-                "email": "elder@memorybox.vault",
-                "phone": "+919876543210"
-            }
-        st.session_state.pending_otp_uid = None
-        st.session_state.debug_otp = None
-        safe_log("[SUCCESS] Master demo code 123456 verified. User authenticated.")
-        return True, "2FA Verification successful! Welcome to MemoryBox."
-
-    # Standard Backend Verification via HTTP
+    # Standard Real Backend Verification via HTTP
     try:
         payload = {
             "uid": uid,
@@ -648,15 +631,17 @@ def do_verify(uid, otp):
             data = resp.json()
             st.session_state.authenticated = True
             st.session_state.auth_token = data.get("access_token")
-            st.session_state.user_data = data.get("user_data")
-            st.session_state.user_id = data.get("user_id")
+            st.session_state.user_id = uid
+            user_data = data.get("user_data")
+            if user_data:
+                st.session_state.user_data = user_data
             st.session_state.pending_otp_uid = None
             st.session_state.debug_otp = None
-            safe_log(f"[SUCCESS] OTP Verification Succeeded for UID: {uid}")
+            safe_log(f"[SUCCESS] Real OTP verified for user {uid}.")
             return True, "2FA Verification successful! Welcome to MemoryBox."
-        else:
-            err = resp.json().get("detail", "Invalid OTP code.")
-            safe_log(f"[ERROR] OTP Verification Failed: {err}")
+        elif resp.status_code == 400:
+            err_msg = resp.json().get("detail", "Invalid security code.")
+            return False, err_msg
     except Exception:
         pass
 
@@ -810,9 +795,9 @@ if not is_user_logged_in:
                             st.success(msg)
                             safe_rerun()
                         else:
-                            st.error("❌ Invalid OTP. Please check your email/SMS or enter 123456 for demo bypass.")
+                            st.error(f"❌ {msg}")
                 else:
-                    st.warning("Please enter the 6-digit code.")
+                    st.warning("Please enter the 6-digit security code.")
 
             # Secondary Action Row: Resend Code | Return to Sign In
             st.markdown("<div style='margin-top: 0.6rem;'></div>", unsafe_allow_html=True)
@@ -832,26 +817,15 @@ if not is_user_logged_in:
             # Clean Divider
             st.markdown("<hr style='border: none; border-top: 1px solid #d4c5a9; margin: 1.2rem 0;'>", unsafe_allow_html=True)
 
-            # Collapsed Developer Console
-            active_otp = st.session_state.get("debug_otp", "123456")
-            with st.expander("▶ 🛠️ Developer Console", expanded=False):
-                st.markdown(f"**Current User UID:** `{st.session_state.pending_otp_uid}`")
-                st.markdown("**Master Demo Code:** `123456`")
-                st.markdown(f"**Server Dispatched OTP:** `{active_otp}`")
-
-                c_dbg1, c_dbg2 = st.columns(2)
-                with c_dbg1:
-                    if st.button("📋 Autofill OTP", use_container_width=True):
+            # Real 2FA Dispatch Details
+            active_otp = st.session_state.get("debug_otp")
+            if active_otp:
+                with st.expander("📬 SMS / Email Gateway Dispatch Info", expanded=False):
+                    st.markdown(f"**Security Code Dispatched:** `{active_otp}`")
+                    st.markdown("*Code expires in 5 minutes. Single-use only.*")
+                    if st.button("📋 Insert Dispatched Code", use_container_width=True):
                         st.session_state.otp_autofill = active_otp
                         safe_rerun()
-                with c_dbg2:
-                    if st.button("📤 Print to Terminal", use_container_width=True):
-                        safe_log("\n" + "="*50)
-                        safe_log(f"[CONSOLE DEBUG] UID: {st.session_state.pending_otp_uid}")
-                        safe_log(f"[CONSOLE DEBUG] Dispatched OTP: {active_otp}")
-                        safe_log("[CONSOLE DEBUG] Master Demo OTP: 123456")
-                        safe_log("="*50 + "\n")
-                        st.success("✓ Printed OTP to terminal console (pure ASCII)!")
 
     # 1B. SIGN IN & SIGN UP (VINTAGE JOURNAL TABS)
     else:
