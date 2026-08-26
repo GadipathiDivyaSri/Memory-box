@@ -192,3 +192,52 @@ def test_full_user_journey_e2e(client):
 
     # Journey succeeded completely
     print("\n✅ E2E Full User Journey Succeeded: Signup -> Login -> OTP Bypass (123456) -> Dashboard & Full Memory Lifecycle.")
+
+
+def test_explicit_otp_master_bypass_session_verification(client):
+    """
+    Explicitly tests the master OTP bypass (123456):
+    1. Rejects invalid OTP
+    2. Accepts master bypass '123456'
+    3. Verifies session access_token and user profile are properly set
+    4. Authenticates protected API requests with Bearer token
+    """
+    suffix = uuid.uuid4().hex[:6]
+    email = f"bypass_user_{suffix}@heritage.vault"
+    signup_resp = client.post("/api/auth/signup", json={
+        "full_name": "Bypass Test Elder",
+        "age": 80,
+        "email": email,
+        "phone": "+919876543210",
+        "password": "Password123!"
+    })
+    assert signup_resp.status_code == 201
+    user_id = signup_resp.json()["user_id"]
+
+    # 1. Login user to initiate 2FA
+    login_resp = client.post("/api/auth/login", json={"email": email, "password": "Password123!"})
+    assert login_resp.status_code == 200
+    assert login_resp.json()["requires_otp"] is True
+
+    # 2. Reject incorrect OTP
+    bad_verify = client.post("/api/auth/verify-otp", json={"user_id": user_id, "otp_code": "000000"})
+    assert bad_verify.status_code == 400
+
+    # 3. Master bypass 123456 verification
+    good_verify = client.post("/api/auth/verify-otp", json={"user_id": user_id, "otp_code": "123456"})
+    assert good_verify.status_code == 200
+    data = good_verify.json()
+
+    # 4. Verify session state fields
+    assert "access_token" in data
+    token = data["access_token"]
+    assert len(token) > 20
+    assert "user_data" in data
+    assert data["user_data"]["email"] == email
+
+    # 5. Verify protected endpoint accepts the session token
+    auth_header = {"Authorization": f"Bearer {token}"}
+    protected_resp = client.get("/api/memories/stats/health-score", headers=auth_header)
+    assert protected_resp.status_code == 200
+    assert "completion_percentage" in protected_resp.json()
+

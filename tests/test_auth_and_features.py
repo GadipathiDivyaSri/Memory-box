@@ -348,3 +348,20 @@ def test_timeline_and_map_routers(client):
     assert mig_resp.status_code == 200
     assert "paths" in mig_resp.json()
 
+
+def test_emotion_timeline_and_timeline_desc(client):
+    """Tests timeline sorting descending, era fallback, and emotion trajectory processing."""
+    from backend.app.services.memory_processor import MemoryProcessor
+    import asyncio
+
+    # Test timeline descending sort
+    tl_desc = client.get("/api/timeline/?sort=desc")
+    assert tl_desc.status_code == 200
+
+    # Test processor emotion timeline with memories
+    processor = MemoryProcessor()
+    et = asyncio.run(processor.get_emotion_timeline("elder_heritage_keeper_1"))
+    assert isinstance(et, list)
+    assert len(et) > 0
+
+

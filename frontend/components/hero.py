@@ -30,11 +30,22 @@ def render_hero_section(on_create_click=None, on_explore_click=None):
     with col_c2:
         c_btn1, c_btn2 = st.columns(2)
         with c_btn1:
-            if st.button("➕ Create Memory", type="primary", use_container_width=True, key="hero_cta_create"):
+            if st.button(
+                "➕ Create Memory",
+                type="primary",
+                use_container_width=True,
+                key="hero_cta_create",
+                help="AI will automatically generate a title, summary, and tags for you."
+            ):
                 if on_create_click:
                     on_create_click()
         with c_btn2:
-            if st.button("✨ Explore My Memories", use_container_width=True, key="hero_cta_explore"):
+            if st.button(
+                "✨ Explore My Memories",
+                use_container_width=True,
+                key="hero_cta_explore",
+                help="Search your personal memory vault naturally."
+            ):
                 if on_explore_click:
                     on_explore_click()
 

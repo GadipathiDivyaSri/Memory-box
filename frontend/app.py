@@ -110,6 +110,54 @@ if "selected_category" not in st.session_state:
 # Apply Custom Design System CSS
 apply_memorybox_theme(is_elder_mode=st.session_state.elder_mode)
 
+# Global Accessibility: ARIA Labels & Keyboard Shortcuts (Ctrl+Enter / Cmd+Enter)
+import streamlit.components.v1 as components
+components.html("""
+<script>
+(function() {
+    try {
+        const parentDoc = window.parent.document;
+        if (parentDoc._mb_global_kbd_listener) return;
+        parentDoc._mb_global_kbd_listener = true;
+
+        // Attach ARIA labels dynamically to action buttons
+        function updateAriaLabels() {
+            const btns = parentDoc.querySelectorAll('button');
+            btns.forEach(btn => {
+                const text = btn.innerText || "";
+                if (text.includes('Create Memory') || text.includes('Understand with AI')) {
+                    btn.setAttribute('aria-label', 'Create a new memory');
+                } else if (text.includes('Explore') || text.includes('Ask') || text.includes('Search')) {
+                    btn.setAttribute('aria-label', 'Search your memories');
+                }
+            });
+            const inputs = parentDoc.querySelectorAll('input[type="text"], textarea');
+            inputs.forEach(input => {
+                if (!input.getAttribute('aria-label')) {
+                    input.setAttribute('aria-label', 'Search your memories');
+                }
+            });
+        }
+        updateAriaLabels();
+        setInterval(updateAriaLabels, 2000);
+
+        // Global keyboard listener for Ctrl+Enter or Cmd+Enter
+        parentDoc.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const submitBtn = parentDoc.querySelector('button[kind="primary"]') || 
+                                  parentDoc.querySelector('form button[type="submit"]') ||
+                                  parentDoc.querySelector('.stButton button');
+                if (submitBtn) {
+                    submitBtn.focus();
+                    submitBtn.click();
+                }
+            }
+        });
+    } catch(err) {}
+})();
+</script>
+""", height=0, width=0)
+
 
 # --- Authentication Helpers ---
 def get_auth_headers():
@@ -658,28 +706,54 @@ else:
             explanation = search_res["explanation"]
 
             # AI Explanation Card
-            st.markdown(f"""
-            <div style="background: #ffffff; border: 1px solid #d4af37; border-radius: 12px; padding: 14px 18px; margin: 1rem 0; box-shadow: 0 2px 10px rgba(212,175,55,0.1);">
-                <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.85rem; color: #8b5a2b; margin-bottom: 4px;">
-                    🤖 AI Search Assistant
-                </div>
-                <div style="color: #4a382d; font-size: 0.98rem; line-height: 1.5;">
-                    {explanation}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
             if matches:
-                st.markdown(f"#### I found {len(matches)} matching {'memory' if len(matches) == 1 else 'memories'}:")
-                m_cols = st.columns(min(len(matches), 3) if len(matches) <= 3 else 3)
+                st.markdown(f"""
+                <div style="background: linear-gradient(135deg, #fffdf8 0%, #faf3e5 100%); border: 1.5px solid #d4af37; border-radius: 14px; padding: 18px 22px; margin: 1.2rem 0; box-shadow: 0 4px 18px rgba(139,90,43,0.08);">
+                    <div style="display: flex; align-items: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.9rem; color: #8b5a2b; margin-bottom: 6px;">
+                        <span>🧠</span> AI Search Intelligence &nbsp;·&nbsp; <span style="color: #2e7d32; font-weight: 600;">✓ {len(matches)} matching moments identified</span>
+                    </div>
+                    <div style="color: #3b2a20; font-size: 1rem; line-height: 1.6;">
+                        {explanation}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown(f"<h4 style='font-family: \"Playfair Display\", serif; color: #3b2a20; margin-top: 1rem;'>Matching Memories ({len(matches)})</h4>", unsafe_allow_html=True)
+                m_cols = st.columns(3)
                 for idx, mem in enumerate(matches):
-                    col_target = m_cols[idx % 3]
-                    with col_target:
+                    with m_cols[idx % 3]:
                         def make_open_handler(target_id):
                             return lambda mid: (setattr(st.session_state, "selected_memory_id", target_id), safe_rerun())
                         render_memory_card(mem, on_select=make_open_handler(mem.id))
             else:
-                render_empty_search(user_query)
+                st.markdown(f"""
+                <div style="background: linear-gradient(135deg, #fffaf4 0%, #fbf1e4 100%); border: 1.5px solid #d99a6c; border-radius: 14px; padding: 22px; margin: 1.2rem 0; text-align: center;">
+                    <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">⏳</div>
+                    <h3 style="font-family: 'Playfair Display', serif; color: #5a2e16; margin-bottom: 0.4rem;">
+                        No Memories Found for this Specific Timeframe
+                    </h3>
+                    <p style="color: #705342; font-size: 1rem; max-width: 600px; margin: 0 auto 1rem auto; line-height: 1.5;">
+                        {explanation}
+                    </p>
+                    <div style="font-size: 0.88rem; color: #8b5a2b; font-weight: 600;">
+                        💡 Try clicking one of the available years recorded in your vault:
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+                c_y1, c_y2, c_y3 = st.columns([1, 1, 1])
+                with c_y1:
+                    if st.button("🗓️ Memories from 2024", key="no_res_2024", use_container_width=True):
+                        st.session_state.search_query = "Show memories from 2024"
+                        safe_rerun()
+                with c_y2:
+                    if st.button("🗓️ Memories from 2025", key="no_res_2025", use_container_width=True):
+                        st.session_state.search_query = "Show memories from 2025"
+                        safe_rerun()
+                with c_y3:
+                    if st.button("🗓️ Memories from 2026", key="no_res_2026", use_container_width=True):
+                        st.session_state.search_query = "Show memories from 2026"
+                        safe_rerun()
         else:
             st.info("💡 Enter a question or click one of the suggested query buttons above to search.")
 

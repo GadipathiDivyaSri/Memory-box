@@ -62,17 +62,44 @@ class MemorySearchEngine:
             }
 
         # 4. Natural Language Intent & Keyword Matching
-        stopwords = {"show", "me", "my", "from", "the", "memories", "memory", "find", "what", "did", "take", "related", "containing", "about"}
+        stopwords = {"show", "me", "my", "from", "the", "memories", "memory", "find", "what", "did", "take", "related", "containing", "about", "with", "in"}
         tokens = [t for t in re.split(r"\W+", clean_q) if len(t) > 2 and t not in stopwords]
 
-        # Check for year in query
+        # Check for year in query (e.g. 2020, 2024, 2025, 2026, 1968, 1974)
         year_in_query = None
         yr_m = re.search(r"\b(19\d\d|20\d\d)\b", clean_q)
         if yr_m:
             year_in_query = int(yr_m.group(1))
-            year_matches = [m for m in candidates if m.year == year_in_query]
-            if year_matches:
-                candidates = year_matches
+        elif "last year" in clean_q:
+            year_in_query = 2025
+        elif "this year" in clean_q:
+            year_in_query = 2026
+
+        if year_in_query:
+            candidates = [m for m in candidates if m.year == year_in_query]
+            if not candidates:
+                all_years = sorted(list({m.year for m in memories if m.year}))
+                years_str = ", ".join(str(y) for y in all_years)
+                return {
+                    "matches": [],
+                    "explanation": f"No memories found specifically from the year {year_in_query}. Your vault currently contains memories recorded in: {years_str}.",
+                    "query": query,
+                    "total_found": 0
+                }
+
+        # Check for month in query (e.g. January, August, October)
+        months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
+        for m_name in months:
+            if re.search(rf"\b{m_name}\b", clean_q):
+                candidates = [m for m in candidates if m_name in m.date.lower() or m_name in m.summary.lower() or m_name in m.description.lower()]
+                if not candidates:
+                    return {
+                        "matches": [],
+                        "explanation": f"No memories found specifically for the month of {m_name.title()} in your vault.",
+                        "query": query,
+                        "total_found": 0
+                    }
+                break
 
         # Check for category hints
         category_hints = {

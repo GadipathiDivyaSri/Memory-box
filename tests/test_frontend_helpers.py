@@ -74,6 +74,17 @@ def test_natural_language_search_engine():
     assert res_yr["total_found"] > 0
     assert all(m.year == 2025 for m in res_yr["matches"])
 
+    # Query 5: Specific year 2020 where no memories exist
+    res_2020 = search_engine.search("trips with my family in 2020", mems)
+    assert res_2020["total_found"] == 0
+    assert len(res_2020["matches"]) == 0
+    assert "2020" in res_2020["explanation"]
+
+    # Query 6: Specific month (January)
+    res_jan = search_engine.search("events in January", mems)
+    assert res_jan["total_found"] > 0
+    assert any("January" in m.date for m in res_jan["matches"])
+
 
 def test_smart_categories_list():
     """Verifies defined categories."""

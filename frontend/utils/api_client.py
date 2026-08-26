@@ -1,12 +1,12 @@
 """
-API Client & State Manager for MemoryBox
-Handles memory persistence, caching, and state synchronization across views.
+Frontend API Client & State Manager Utility
+Provides typed client functions for interacting with backend memory services and local vault state.
 """
 
+from typing import List, Dict, Any, Optional
 import streamlit as st
-from typing import List, Optional
-from ..utils.types import MemoryItemView
-from .demo_data import get_demo_memories
+from .types import MemoryItemView
+from ..services.demo_data import get_demo_memories
 
 
 def get_all_memories() -> List[MemoryItemView]:
@@ -20,12 +20,11 @@ def add_memory(memory: MemoryItemView) -> None:
     """Adds a newly created memory to the user's active vault."""
     if "user_memories" not in st.session_state:
         st.session_state.user_memories = []
-    # Insert at beginning so newest memory appears first
     st.session_state.user_memories.insert(0, memory)
 
 
 def delete_memory_by_id(memory_id: str) -> bool:
-    """Deletes a memory by its ID."""
+    """Deletes a memory by its unique ID."""
     if "user_memories" in st.session_state:
         before_count: int = len(st.session_state.user_memories)
         st.session_state.user_memories = [m for m in st.session_state.user_memories if m.id != memory_id]
@@ -47,8 +46,8 @@ def reset_to_demo_memories() -> None:
     st.session_state.user_memories = get_demo_memories()
 
 
-def calculate_vault_stats() -> dict[str, int]:
-    """Computes real-time statistics for the dashboard."""
+def calculate_vault_stats() -> Dict[str, int]:
+    """Computes real-time statistics for the dashboard metric cards."""
     mems: List[MemoryItemView] = get_all_memories()
     total: int = len(mems)
     photos: int = sum(1 for m in mems if m.image_url)

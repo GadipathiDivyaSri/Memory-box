@@ -28,7 +28,9 @@ settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Initializes demo archival data if database is fresh."""
+    """Initializes environment validation and demo archival data if database is fresh."""
+    from .utils.env_check import validate_environment
+    validate_environment()
     logger.info("Initializing MemoryBox Digital Heritage Vault...")
     # Seed high-fidelity sample heritage stories for immediate demonstration
     existing = await db_client.list_memories(user_id="elder_heritage_keeper_1", limit=1)
