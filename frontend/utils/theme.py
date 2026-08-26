@@ -187,60 +187,103 @@ def apply_memorybox_theme(is_elder_mode: bool = False):
         line-height: 1.4;
     }}
 
+    /* Form Labels - 100% Crisp Visible Slate */
+    label, 
+    label p,
+    .stWidgetLabel, 
+    .stWidgetLabel p, 
+    div[data-testid="stWidgetLabel"] p,
+    div[data-testid="stWidgetLabel"] span {
+        color: #0f172a !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+        opacity: 1 !important;
+        line-height: 1.5 !important;
+    }
+
+    /* BaseWeb Input Containers - Crisp White Background */
+    div[data-baseweb="textarea"],
+    div[data-baseweb="input"],
+    div[data-baseweb="base-input"],
+    .stTextInput > div > div,
+    .stTextArea > div > div {
+        background-color: #ffffff !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 10px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    div[data-baseweb="textarea"]:focus-within,
+    div[data-baseweb="input"]:focus-within {
+        border-color: #4f46e5 !important;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18) !important;
+    }
+
+    /* BaseWeb Input & Textarea Elements */
+    div[data-baseweb="textarea"] textarea,
+    div[data-baseweb="input"] input,
+    .stTextArea textarea,
+    .stTextInput input {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 1rem !important;
+    }
+
+    div[data-baseweb="textarea"] textarea::placeholder,
+    div[data-baseweb="input"] input::placeholder,
+    .stTextArea textarea::placeholder,
+    .stTextInput input::placeholder {
+        color: #94a3b8 !important;
+        -webkit-text-fill-color: #94a3b8 !important;
+        font-size: 0.95rem !important;
+    }
+
     /* Button Polish */
-    .stButton > button {{
+    .stButton > button {
         min-height: {btn_min_height};
         font-size: {btn_font_size} !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-weight: 600 !important;
         border-radius: 10px !important;
         border: 1px solid #cbd5e1 !important;
-        background: #ffffff;
+        background: #ffffff !important;
         color: #1e293b !important;
+        -webkit-text-fill-color: #1e293b !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         transition: all 0.15s ease-in-out;
-    }}
+    }
 
-    .stButton > button:hover {{
+    .stButton > button:hover {
         background: #f8fafc !important;
         color: #4f46e5 !important;
+        -webkit-text-fill-color: #4f46e5 !important;
         border-color: #6366f1 !important;
         box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
-    }}
+    }
 
-    /* Primary Action Button - Vibrant Indigo Gradient */
+    /* Primary Action Button - Guaranteed Vibrant Indigo Gradient */
     div[data-testid="stVerticalBlock"] > div > button[kind="primary"],
     button[type="submit"][kind="primary"],
-    .stButton > button[kind="primary"] {{
+    .stButton > button[kind="primary"],
+    button[data-testid="baseButton-primary"] {
         background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%) !important;
         color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
         border: none !important;
         font-weight: 700 !important;
         box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35) !important;
-    }}
+    }
 
     div[data-testid="stVerticalBlock"] > div > button[kind="primary"]:hover,
     button[type="submit"][kind="primary"]:hover,
-    .stButton > button[kind="primary"]:hover {{
+    .stButton > button[kind="primary"]:hover,
+    button[data-testid="baseButton-primary"]:hover {
         background: linear-gradient(135deg, #4338ca 0%, #2563eb 100%) !important;
         box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45) !important;
         transform: translateY(-1px);
-    }}
-
-    /* Inputs & Textareas */
-    .stTextInput > div > div > input, .stTextArea > div > div > textarea {{
-        background: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 10px !important;
-        color: #0f172a !important;
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
-    }}
-
-    .stTextInput > div > div > input:focus, .stTextArea > div > div > textarea:focus {{
-        border-color: #6366f1 !important;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
-    }}
+    }
 
     /* Top Navigation bar */
     .navbar-container {{
