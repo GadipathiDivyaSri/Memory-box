@@ -16,7 +16,7 @@ def apply_memorybox_theme(is_elder_mode: bool = False):
     btn_font_size = "1.3rem" if is_elder_mode else "0.95rem"
     card_border = "3px solid #1e293b" if is_elder_mode else "1px solid #e2e8f0"
 
-    st.markdown(f"""
+    css = f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
 
@@ -193,55 +193,55 @@ def apply_memorybox_theme(is_elder_mode: bool = False):
     .stWidgetLabel, 
     .stWidgetLabel p, 
     div[data-testid="stWidgetLabel"] p,
-    div[data-testid="stWidgetLabel"] span {
+    div[data-testid="stWidgetLabel"] span {{
         color: #0f172a !important;
         font-size: 0.95rem !important;
         font-weight: 600 !important;
         opacity: 1 !important;
         line-height: 1.5 !important;
-    }
+    }}
 
     /* BaseWeb Input Containers - Crisp White Background */
     div[data-baseweb="textarea"],
     div[data-baseweb="input"],
     div[data-baseweb="base-input"],
     .stTextInput > div > div,
-    .stTextArea > div > div {
+    .stTextArea > div > div {{
         background-color: #ffffff !important;
         border: 1.5px solid #cbd5e1 !important;
         border-radius: 10px !important;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    }
+    }}
 
     div[data-baseweb="textarea"]:focus-within,
-    div[data-baseweb="input"]:focus-within {
+    div[data-baseweb="input"]:focus-within {{
         border-color: #4f46e5 !important;
         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18) !important;
-    }
+    }}
 
     /* BaseWeb Input & Textarea Elements */
     div[data-baseweb="textarea"] textarea,
     div[data-baseweb="input"] input,
     .stTextArea textarea,
-    .stTextInput input {
+    .stTextInput input {{
         background-color: #ffffff !important;
         color: #0f172a !important;
         -webkit-text-fill-color: #0f172a !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-size: 1rem !important;
-    }
+    }}
 
     div[data-baseweb="textarea"] textarea::placeholder,
     div[data-baseweb="input"] input::placeholder,
     .stTextArea textarea::placeholder,
-    .stTextInput input::placeholder {
+    .stTextInput input::placeholder {{
         color: #94a3b8 !important;
         -webkit-text-fill-color: #94a3b8 !important;
         font-size: 0.95rem !important;
-    }
+    }}
 
     /* Button Polish */
-    .stButton > button {
+    .stButton > button {{
         min-height: {btn_min_height};
         font-size: {btn_font_size} !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
@@ -253,37 +253,37 @@ def apply_memorybox_theme(is_elder_mode: bool = False):
         -webkit-text-fill-color: #1e293b !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         transition: all 0.15s ease-in-out;
-    }
+    }}
 
-    .stButton > button:hover {
+    .stButton > button:hover {{
         background: #f8fafc !important;
         color: #4f46e5 !important;
         -webkit-text-fill-color: #4f46e5 !important;
         border-color: #6366f1 !important;
         box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
-    }
+    }}
 
     /* Primary Action Button - Guaranteed Vibrant Indigo Gradient */
     div[data-testid="stVerticalBlock"] > div > button[kind="primary"],
     button[type="submit"][kind="primary"],
     .stButton > button[kind="primary"],
-    button[data-testid="baseButton-primary"] {
+    button[data-testid="baseButton-primary"] {{
         background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%) !important;
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
         border: none !important;
         font-weight: 700 !important;
         box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35) !important;
-    }
+    }}
 
     div[data-testid="stVerticalBlock"] > div > button[kind="primary"]:hover,
     button[type="submit"][kind="primary"]:hover,
     .stButton > button[kind="primary"]:hover,
-    button[data-testid="baseButton-primary"]:hover {
+    button[data-testid="baseButton-primary"]:hover {{
         background: linear-gradient(135deg, #4338ca 0%, #2563eb 100%) !important;
         box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45) !important;
         transform: translateY(-1px);
-    }
+    }}
 
     /* Top Navigation bar */
     .navbar-container {{
@@ -333,4 +333,5 @@ def apply_memorybox_theme(is_elder_mode: bool = False):
         background: #94a3b8;
     }}
     </style>
-    """, unsafe_allow_html=True)
+    """
+    st.markdown(css, unsafe_allow_html=True)
