@@ -473,6 +473,28 @@ with col_acc_right:
 
 apply_heritage_theme(is_elder_mode=st.session_state.elder_mode)
 
+# --- Accessibility: ARIA Live Region & Global Ctrl+Enter Form Submission ---
+st.markdown("""
+<div id="heritage-aria-live-region" aria-live="polite" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0);">
+    MemoryBox Heritage Vault Interactive Interface Ready
+</div>
+<script>
+(function() {
+    if (window._memorybox_kbd_listener) return;
+    window._memorybox_kbd_listener = true;
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            const btn = document.querySelector('button[kind="primary"]') || document.querySelector('.stButton button');
+            if (btn) {
+                btn.focus();
+                btn.click();
+            }
+        }
+    });
+})();
+</script>
+""", unsafe_allow_html=True)
+
 # Display server connectivity status
 if not BACKEND_ONLINE:
     st.error("⚠️ Backend server is not running. Please start the server (`uvicorn app.main:app --port 8000`).")

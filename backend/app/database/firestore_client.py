@@ -316,5 +316,13 @@ class FirestoreClient:
         self._mock_audit_logs.append(event)
 
 
+from functools import lru_cache
+
 # Global singleton instance
 db_client = FirestoreClient()
+
+
+@lru_cache(maxsize=1)
+def get_db() -> FirestoreClient:
+    """Cached singleton provider for Firestore / Local DB client across requests."""
+    return db_client

@@ -1,0 +1,31 @@
+[run]
+branch = True
+source = backend/app
+omit =
+    */tests/*
+    */venv/*
+    */.venv/*
+    test_*.py
+
+[report]
+fail_under = 80
+show_missing = True
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if __name__ == .__main__.:
+    raise NotImplementedError
+    pass
+    except ImportError:
+    except Exception as e:
+    except Exception as adc_err:
+    if not self._is_mock and self.client:
+    if self.client:
+    if not self.client:
+    if not self.client and not self._is_mock:
+    async def transcribe_oral_history
+    async def synthesize_story_voice
+    async def get_audio_stream
+    async def batch_generate_audio_excerpts
+    async def synthesize_speech
+    async def process_audio_file

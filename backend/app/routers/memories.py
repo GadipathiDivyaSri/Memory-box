@@ -26,12 +26,13 @@ router = APIRouter(prefix="/api/memories", tags=["Memory Vault & Heritage"])
 async def list_memories(
     era: Optional[str] = Query(None, description="Filter by era e.g. 1960s"),
     tag: Optional[str] = Query(None, description="Filter by tag"),
-    limit: int = Query(100, ge=1, le=200),
+    limit: int = Query(20, ge=1, le=100, description="Number of memories to return (default 20)"),
+    offset: int = Query(0, ge=0, description="Number of memories to skip (default 0)"),
     user_id: str = Depends(get_current_user_id)
 ):
-    """Retrieves chronological memories for the authenticated user's vault."""
-    memories = await db_client.list_memories(user_id=user_id, era=era, tag=tag, limit=limit)
-    return memories
+    """Retrieves paginated chronological memories for the authenticated user's vault."""
+    all_memories = await db_client.list_memories(user_id=user_id, era=era, tag=tag, limit=limit + offset)
+    return all_memories[offset : offset + limit]
 
 
 @router.post("/", response_model=Dict[str, Any])

@@ -20,6 +20,19 @@ from .gemini_service import gemini_service
 
 logger = logging.getLogger("memorybox.processor")
 
+try:
+    import bleach
+    def sanitize_story_text(text: str) -> str:
+        if not text:
+            return ""
+        return bleach.clean(str(text), tags=[], strip=True).strip()
+except ImportError:
+    import re
+    def sanitize_story_text(text: str) -> str:
+        if not text:
+            return ""
+        return re.sub(r"<[^>]*?>", "", str(text)).strip()
+
 
 class MemoryProcessor:
     async def process_and_save_memory(
@@ -34,6 +47,11 @@ class MemoryProcessor:
         """Runs the complete memory extraction, cross-checking, and persistence pipeline."""
         memory_id = f"mem_{uuid.uuid4().hex[:12]}"
         media_urls = media_urls or []
+
+        # Sanitize all user-submitted text using bleach (prevents XSS)
+        title = sanitize_story_text(title)
+        raw_transcript = sanitize_story_text(raw_transcript)
+        story_narrative = sanitize_story_text(story_narrative)
 
         # Step 1: AI Metadata Extraction via Gemini 1.5 Flash with Author Age Context
         user = await db_client.get_user(user_id)

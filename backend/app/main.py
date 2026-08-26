@@ -5,13 +5,18 @@ Production-grade backend built for Google Cloud Run and Firebase.
 
 import logging
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from .config import get_settings
 from .routers import auth, memories, interview, ask, timeline, map
 from .database.firestore_client import db_client
+from .utils.rate_limiter import limiter
+from .exceptions import http_exception_handler, validation_exception_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi import _rate_limit_exceeded_handler
+from fastapi.exceptions import RequestValidationError
 
 logging.basicConfig(
     level=logging.INFO,
@@ -109,6 +114,13 @@ app.add_middleware(
 )
 
 
+# Rate Limiter & Standardized Error Handling
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_exception_handler(HTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+
+
 # Global Exception Handler (Zero stack trace leaks)
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
@@ -116,8 +128,9 @@ async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
+            "status": "error",
             "error": "Internal Server Error",
-            "message": "An unexpected error occurred while preserving heritage data. Please try again later.",
+            "detail": "An unexpected error occurred while preserving heritage data. Please try again later.",
             "path": request.url.path
         }
     )

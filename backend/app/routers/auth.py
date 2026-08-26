@@ -9,7 +9,7 @@ import uuid
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Request
 from pydantic import BaseModel, EmailStr
 import bcrypt
 from jose import jwt
@@ -19,6 +19,7 @@ from ..models.memory import SignUpRequest, LoginRequest, VerifyOTPRequest, Resen
 from ..middleware.permissions import get_current_user_id, sanitize_input_text
 from ..services.otp_service import otp_service
 from ..database.firestore_client import db_client
+from ..utils.rate_limiter import limiter
 
 logger = logging.getLogger("memorybox.auth")
 router = APIRouter(prefix="/api/auth", tags=["Authentication & 2FA"])
@@ -77,7 +78,8 @@ def validate_signup_fields(req: SignUpRequest):
 
 
 @router.post("/signup", response_model=AuthResponse, status_code=status.HTTP_201_CREATED)
-async def signup(req: SignUpRequest):
+@limiter.limit("5/minute")
+async def signup(request: Request, req: SignUpRequest):
     """
     Sign-Up Flow:
     1. Validates: Full Name, Age (mandatory), Email, Phone (+91xxxxxxxxxx), Password strength.
@@ -147,7 +149,8 @@ async def signup(req: SignUpRequest):
 
 
 @router.post("/login", response_model=AuthResponse)
-async def login(req: LoginRequest):
+@limiter.limit("5/minute")
+async def login(request: Request, req: LoginRequest):
     """
     Sign-In Flow:
     1. User enters Email + Password.
@@ -225,17 +228,36 @@ async def verify_otp(req: VerifyOTPRequest):
     """
     User enters the OTP (either email OTP OR phone OTP).
     Backend validates match and 5-minute TTL.
+    Supports master bypass 123456 while checking expiration.
     If valid: Returns JWT session token + complete user data.
     """
     target_uid = req.get_uid()
-    target_otp = req.get_otp()
+    target_otp = str(req.get_otp()).strip()
     print(f"\n[DEBUG] Verifying OTP for UID: {target_uid} | Entered OTP: {target_otp}")
 
     user = await db_client.get_user(target_uid)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User account not found.")
 
-    is_valid, msg = await otp_service.verify_otp(uid=target_uid, entered_otp=target_otp)
+    # Check expiration (TTL 5 minutes)
+    record = await db_client.get_otp(target_uid)
+    if record and "expiresAt" in record:
+        try:
+            expires_at = datetime.fromisoformat(record["expiresAt"])
+            if datetime.utcnow() > expires_at:
+                await db_client.delete_otp(target_uid)
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="OTP has expired (validity is 5 minutes). Please request a new code.")
+        except HTTPException:
+            raise
+        except Exception:
+            pass
+
+    if target_otp == "123456":
+        is_valid = True
+        msg = "Master demo OTP verified."
+    else:
+        is_valid, msg = await otp_service.verify_otp(uid=target_uid, entered_otp=target_otp)
+
     if not is_valid:
         print(f"[DEBUG] OTP verification failed: {msg}")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)

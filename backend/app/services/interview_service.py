@@ -115,8 +115,8 @@ class InterviewService:
 
         user_answer = request.user_response.strip()
 
-        # Check for user exit condition
-        should_finish = self._is_exit_signal(user_answer) or (session.current_turn >= self.max_turns)
+        # Check for user exit condition or 3-turn completion
+        should_finish = self._is_exit_signal(user_answer) or (len(session.exchanges) + 1 >= 3) or (session.current_turn >= 3)
 
         # Build transcript history for context
         history_list = []
@@ -135,7 +135,7 @@ class InterviewService:
             )
 
         exchange = InterviewExchange(
-            turn=session.current_turn,
+            turn=len(session.exchanges) + 1,
             user_response=user_answer,
             follow_up_questions=next_questions,
             timestamp=datetime.utcnow()
