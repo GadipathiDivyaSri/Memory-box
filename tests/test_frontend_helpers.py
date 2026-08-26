@@ -82,3 +82,20 @@ def test_smart_categories_list():
     assert "All" in cat_names
     assert "Family" in cat_names
     assert "Travel" in cat_names
+
+
+def test_navbar_tabs_structure():
+    """Verifies navbar renders all 6 tabs without TypeError."""
+    from frontend.components.navbar import render_navbar
+    from unittest.mock import MagicMock, patch
+
+    mock_st = MagicMock()
+    mock_cols = [MagicMock() for _ in range(6)]
+    mock_st.columns.return_value = mock_cols
+
+    with patch("frontend.components.navbar.st", mock_st):
+        render_navbar(active_tab="home", on_tab_change=lambda x: None)
+
+    assert mock_st.columns.called
+    assert mock_st.button.call_count == 6
+

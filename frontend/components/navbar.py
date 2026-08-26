@@ -30,11 +30,11 @@ def render_navbar(active_tab: str, on_tab_change: Callable[[str], None]):
     """, unsafe_allow_html=True)
 
     cols = st.columns(len(tabs))
-    for idx, (tab_id, label) in enumerate(cols):
-        with label:
+    for idx, (tab_id, label) in enumerate(tabs):
+        with cols[idx]:
             is_active = (active_tab == tab_id)
             btn_type = "primary" if is_active else "secondary"
-            if st.button(tabs[idx][1], key=f"nav_tab_{tab_id}", type=btn_type, use_container_width=True):
+            if st.button(label, key=f"nav_tab_{tab_id}", type=btn_type, use_container_width=True):
                 on_tab_change(tab_id)
 
     st.markdown("<hr style='margin: 0.8rem 0 1.2rem 0; border: none; border-top: 1px solid #e2d7c5;'>", unsafe_allow_html=True)
